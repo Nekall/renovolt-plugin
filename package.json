@@ -5,12 +5,7 @@
   "main": "dist/renovolt-plugin.js",
   "scripts": {
     "build": "node scripts/build.js",
-    "dev": "node scripts/dev.js",
-    "watch": "node scripts/watch.js",
     "clean": "rm -rf dist/*"
-  },
-  "devDependencies": {
-    "chokidar": "^3.5.3"
   },
   "files": [
     "dist/"
