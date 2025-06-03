@@ -1,0 +1,7 @@
+{
+  "name": "Renovolt",
+  "description": "Power up your style on Revolt.Chat",
+  "author": "Neka",
+  "version": "0.0.1",
+  "source": "dist/index.js"
+}
