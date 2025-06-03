@@ -1,19 +1,168 @@
-import { PLUGIN_CONFIG } from "./config/plugin-config.js";
-import { StyleInjector } from "./core/StyleInjector.js";
-import { ProfileDetector } from "./core/ProfileDetector.js";
-import { SettingsManager } from "./core/SettingsManager.js";
-import { Observer } from "./core/Observer.js";
-import { ConfigPanel } from "./components/ConfigPanel.js";
-import { RenovoltButton } from "./components/Button.js";
-import { Logger } from "./utils/logger.js";
+
+// Revolt Renovolt Plugin v0.0.1
+// Generated automatically - Do not edit directly
+
+(function() {
+  'use strict';
+
+  // === CSS STYLES ===
+  const CSS_CONTENT = `
+/* === backgrounds.css === */
+
+
+/* === badges.css === */
+
+
+/* === base.css === */
+
+
+/* === frames.css === */
+
+
+/* === ui.css === */
+
+`;
+
+  // === HTML TEMPLATES ===
+  const HTML_TEMPLATES = {
+  "panel": ""
+};
+
+  // === STYLE INJECTOR ===
+  class StyleInjector {
+    constructor() {
+      this.styleId = 'renovolt-styles';
+    }
+
+    injectStyles() {
+      // Remove existing styles
+      const existing = document.getElementById(this.styleId);
+      if (existing) existing.remove();
+
+      // Inject new styles
+      const style = document.createElement('style');
+      style.id = this.styleId;
+      style.textContent = CSS_CONTENT;
+      document.head.appendChild(style);
+    }
+
+    removeStyles() {
+      const existing = document.getElementById(this.styleId);
+      if (existing) existing.remove();
+    }
+  }
+
+  // === MAIN PLUGIN CODE ===
+  
+// === config/plugin-config.js ===
+export const PLUGIN_CONFIG = {
+  version: "0.1.1",
+  namespace: "community",
+  id: "renovolt",
+  name: "Renovolt",
+  description:
+    "Customize your Revolt profile with frames, backgrounds, and badges",
+};
+
+
+// === core/ProfileDetector.js ===
+export class ProfileDetector {
+  constructor() {
+    this.selectors = [
+      "[data-user-id]",
+      ".member",
+      ".message-author",
+      ".user-profile",
+      ".user-card",
+    ];
+  }
+
+  findProfiles() {
+    const profiles = [];
+
+    this.selectors.forEach((selector) => {
+      document.querySelectorAll(selector).forEach((el) => {
+        if (!el.classList.contains("renovolt-processed")) {
+          profiles.push(el);
+        }
+      });
+    });
+
+    return profiles;
+  }
+
+  cleanDecorations() {
+    document.querySelectorAll(".renovolt-processed").forEach((el) => {
+      el.classList.remove("renovolt-processed");
+
+      // Remove frame classes
+      el.classList.remove("renovolt-frame-neon-blue", "renovolt-frame-minimal");
+
+      // Remove background classes
+      el.classList.remove("renovolt-bg-gradient", "renovolt-bg-cyberpunk");
+
+      // Remove badges
+      const badges = el.querySelector(".renovolt-badges");
+      if (badges) badges.remove();
+    });
+  }
+}
+
+
+// === core/SettingsManager.js ===
+
+// === config/default-settings.js ===
+export const DEFAULT_SETTINGS = {
+  selectedFrame: "neon-blue",
+  selectedBackground: "gradient",
+  badges: ["dev"],
+};
+
+export class SettingsManager {
+  constructor() {
+    this.storageKey = "renovolt-settings";
+  }
+
+  getSettings() {
+    try {
+      const saved = localStorage.getItem(this.storageKey);
+      return saved
+        ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) }
+        : DEFAULT_SETTINGS;
+    } catch (error) {
+      console.warn("Failed to load settings, using defaults:", error);
+      return DEFAULT_SETTINGS;
+    }
+  }
+
+  saveSettings(settings) {
+    try {
+      localStorage.setItem(this.storageKey, JSON.stringify(settings));
+      return true;
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+      return false;
+    }
+  }
+
+  resetSettings() {
+    try {
+      localStorage.removeItem(this.storageKey);
+      return true;
+    } catch (error) {
+      console.error("Failed to reset settings:", error);
+      return false;
+    }
+  }
+}
+
+
+// === components/ConfigPanel.js ===
+
+
+// === components/Button.js ===
 
 // Import styles
-import "./styles/base.css";
-import "./styles/frames.css";
-import "./styles/backgrounds.css";
-import "./styles/badges.css";
-import "./styles/ui.css";
-
 /**
  * Renovolt Plugin - Main Entry Point
  */
@@ -208,3 +357,27 @@ if (typeof module !== "undefined" && module.exports) {
 if (typeof window !== "undefined") {
   window.RenovoltPlugin = RenovoltPlugin;
 }
+
+
+  // === PLUGIN EXPORT ===
+  window.RenovoltPlugin = RenovoltPlugin;
+
+  // === AUTO-INSTALLATION ===
+  console.log('ʀᴇɴᴏᴠᴏʟᴛ | Plugin v0.0.1 ready for installation!');
+
+  if (typeof state !== 'undefined' && state.plugins) {
+    try {
+      state.plugins.add(RenovoltPlugin);
+      state.plugins.load("community", "renovolt");
+      console.log('ʀᴇɴᴏᴠᴏʟᴛ | Plugin installed and loaded successfully!');
+      console.log('ʀᴇɴᴏᴠᴏʟᴛ | Use openRenovolt() or click the button to configure');
+    } catch (error) {
+      console.error('ʀᴇɴᴏᴠᴏʟᴛ | Installation failed:', error);
+    }
+  } else {
+    console.log('ʀᴇɴᴏᴠᴏʟᴛ | Plugin API not available');
+    console.log('ʀᴇɴᴏᴠᴏʟᴛ | Please enable experimental features in Revolt settings');
+    console.log('ʀᴇɴᴏᴠᴏʟᴛ | Then run: state.plugins.add(RenovoltPlugin); state.plugins.load("community", "renovolt");');
+  }
+
+})();

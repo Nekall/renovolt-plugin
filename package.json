@@ -1,10 +1,26 @@
 {
   "name": "renovolt-plugin",
   "version": "0.0.1",
+  "description": "Power up your style on Revolt.Chat",
+  "main": "dist/renovolt-plugin.js",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --outfile=dist/index.js --format=esm"
+    "build": "node scripts/build.js",
+    "dev": "node scripts/dev.js",
+    "watch": "node scripts/watch.js",
+    "clean": "rm -rf dist/*"
   },
   "devDependencies": {
-    "esbuild": "^0.20.0"
-  }
+    "chokidar": "^3.5.3"
+  },
+  "files": [
+    "dist/"
+  ],
+  "keywords": [
+    "revolt",
+    "plugin",
+    "customization",
+    "profile"
+  ],
+  "author": "Neka",
+  "license": "GNU GPL 3"
 }
